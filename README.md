@@ -1,18 +1,19 @@
-# RAG-for-Beginners (Local Edition)
+# Local-RAG-System
 
 A Retrieval-Augmented Generation (RAG) system built 100% locally using HuggingFace embeddings and Ollama LLM — zero API costs!
 
 ## Project Structure
-RAG-FOR_BEGINNERS/
-├── ingestion_pipeline.py          # Load docs, chunk, embed, store in ChromaDB
-├── retrieval_pipeline.py          # Search vector DB for relevant chunks
-├── answer_generation.py            # Retrieve chunks + generate answer with LLM
-├── context_aware_generation.py    # Conversational RAG with memory
-├── docs/                           # Your .txt documents
-├── db/chroma_db/                   # Vector database (auto-generated)
-├── dpndcs/                         # Virtual environment (ignored by Git)
-└── .env                            # Environment variables (ignored by Git)
 
+| File / Folder | Description |
+|---------------|-------------|
+| `ingestion_pipeline.py` | Load docs, chunk, embed, store in ChromaDB |
+| `retrieval_pipeline.py` | Search vector DB for relevant chunks |
+| `answer_generation.py` | Retrieve chunks + generate answer with LLM |
+| `context_aware_generation.py` | Conversational RAG with memory |
+| `docs/` | Your .txt documents |
+| `db/chroma_db/` | Vector database (auto-generated) |
+| `dpndcs/` | Virtual environment (ignored by Git) |
+| `.env` | Environment variables (ignored by Git) |
 
 ## Tech Stack
 
