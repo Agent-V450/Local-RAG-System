@@ -3,7 +3,8 @@ from typing import List
 from langchain_community.document_loaders import TextLoader, DirectoryLoader
 from langchain_core.documents.base import Document
 # from langchain_text_splitters import CharacterTextSplitter
-from langchain_text_splitters import RecursiveCharacterTextSplitter
+# from langchain_text_splitters import RecursiveCharacterTextSplitter
+from langchain_experimental.text_splitter import SemanticChunker
 # from langchain_openai import OpenAIEmbeddings
 # from langchain_community.embeddings import HuggingFaceEmbeddings
 from langchain_huggingface import HuggingFaceEmbeddings
@@ -45,18 +46,28 @@ def load_documents(docs_path="docs"):
 
     return documents
 
-def split_documents(documents, chunk_size = 800, chunk_overlap = 0):
+# def split_documents(documents, chunk_size = 800, chunk_overlap = 0):
     # Split docs into smaller groups (called as Chunks) with overlap.
-    print("Splitting docs into chunks...")
-
+def split_documents(documents):
+    print("Split docs into Semantic Chunks...")
+    
     # text_splitter = CharacterTextSplitter(
     #     chunk_size = chunk_size,
     #     chunk_overlap = chunk_overlap
     # )
-    text_splitter = RecursiveCharacterTextSplitter(
-    chunk_size=1500,
-    chunk_overlap=200,
-    separators=["\n\n", "\n", " ", ""]
+    
+    # text_splitter = RecursiveCharacterTextSplitter(
+    # chunk_size=1500,
+    # chunk_overlap=200,
+    # separators=["\n\n", "\n", " ", ""]
+    # )
+
+    embedding_model = HuggingFaceEmbeddings(model_name="sentence-transformers/all-MiniLM-L6-v2")
+
+    text_splitter = SemanticChunker(
+        embeddings = embedding_model,
+        breakpoint_threshold_type = "percentile",
+        breakpoint_threshold_amount = 95
     )
 
     chunks = text_splitter.split_documents(documents)   # list of smaller chunks (i.e. output of chunking)
