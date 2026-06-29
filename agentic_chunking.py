@@ -3,9 +3,9 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
+# Try tinyllama first, or upgrade to llama3.2:3b for better results
 llm = OllamaLLM(model="tinyllama")
 
-# Tesla text to chunk
 tesla_text = """Tesla's Q3 Results
 Tesla reported record revenue of $25.2B in Q3 2024.
 The company exceeded analyst expectations by 15%.
@@ -21,39 +21,27 @@ Supply chain issues caused a 12% increase in production costs.
 Tesla is working to diversify its supplier base.
 New manufacturing techniques are being implemented to reduce costs."""
 
-# Create prompt
-prompt = f"""
-You are a text chunking expert. Split this text into logical chunks.
-
-Rules:
-- Each chunk should be around 200 characters or less
-- Split at natural topic boundaries
-- Keep related information together
-- Put "<<<SPLIT>>>" between chunks
+# SIMPLER prompt — small models need this!
+prompt = f"""Split this text into chunks. Put <<<SPLIT>>> between each chunk.
 
 Text:
 {tesla_text}
 
-Return the text with <<<SPLIT>>> markers where you want to split:
-"""
+Output with <<<SPLIT>>> markers:"""
 
-# AI response
 print("🤖 Asking AI to chunk the text...")
 response = llm.invoke(prompt)
 marked_text = response
 
-# Split the text at the markers
 chunks = marked_text.split("<<<SPLIT>>>")
 
-# Cleaning spaces and empty chunks
 clean_chunks = []
 for chunk in chunks:
     cleaned = chunk.strip()
-    if cleaned:  # Only keep non-empty chunks
+    if cleaned and len(cleaned) > 10:  # Filter out junk
         clean_chunks.append(cleaned)
 
-# Results
-print("\n🎯 AGENTIC CHUNKING RESULTS:")
+print(f"\n🎯 AGENTIC CHUNKING RESULTS ({len(clean_chunks)} chunks):")
 print("=" * 50)
 
 for i, chunk in enumerate(clean_chunks, 1):
